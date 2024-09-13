@@ -1,7 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Http\Requests\LoginRequest;
+use App\Http\Requests\RegisterRequest;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
@@ -10,14 +11,10 @@ use App\Models\User;
 class AuthController extends Controller
 {
     //
-    public function register(Request $request)
+    public function register(RegisterRequest $request)
     {
 
-        $user = $request->validate([
-            'name' => 'required|string',
-            'email' => 'required|unique:users,email|string',
-            'password' => 'required|confirmed|string',
-        ]);
+        $request->validate();
 
         $user = User::create([
             "name" => $request->name,
@@ -36,14 +33,10 @@ class AuthController extends Controller
 
 
 
-    public function login(Request $request)
+    public function login(LoginRequest $request)
     {
 
-        $users = $request->validate([
-            'email' => 'required|string',
-            'password' => 'required|string',
-        ]);
-
+        $request->validate();
         //check email
         $users = User::where('email', $users['email'])->first();
 
