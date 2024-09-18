@@ -14,17 +14,18 @@ class AuthController extends Controller
     public function register(RegisterRequest $request)
     {
 
-        $request->validate();
+        // $request->validate();
 
         $user = User::create([
             "name" => $request->name,
             "email" => $request->email,
-            "password" => hash::make($request->password),
+            "password" => Hash::make($request->password),
         ]);
 
         $token = $user->createToken('myapptoken')->plainTextToken;
 
         $response = [
+            "success"=> true,
             "user" => $user,
             "token" => $token,
         ];
@@ -36,9 +37,9 @@ class AuthController extends Controller
     public function login(LoginRequest $request)
     {
 
-        $request->validate();
+        // $request->validate();
         //check email
-        $users = User::where('email', $users['email'])->first();
+        $users = User::where('email', $request->email)->first();
 
         //check password
         if (!$users || !Hash::check($request->password, $users->password)) {
@@ -49,6 +50,7 @@ class AuthController extends Controller
         $token = $users->createToken('myapptoken')->plainTextToken;
 
         $response = [
+            "success"=> true,
             "user" => $users,
             "token" => $token,
         ];
